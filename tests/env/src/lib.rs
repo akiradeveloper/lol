@@ -138,9 +138,10 @@ impl Env {
             .or_insert_with(|| {
                 let uri = self.nodes.get(&id).unwrap().address();
                 let endpoint = Endpoint::from(uri)
+                    .buffer_size(1<<16)
                     .http2_keep_alive_interval(std::time::Duration::from_secs(1))
                     .keep_alive_while_idle(true)
-                    .timeout(std::time::Duration::from_secs(5))
+                    .timeout(std::time::Duration::from_secs(30))
                     .connect_timeout(std::time::Duration::from_secs(5));
                 let chan = endpoint.connect_lazy();
                 chan
